@@ -20,7 +20,7 @@ function ball() {
         dy = -dy 
     }
     element.style.transform = `translate(${x}px, ${y}px)`
-
+    
     requestAnimationFrame(ball)
 }
 requestAnimationFrame(ball)

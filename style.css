@@ -19,3 +19,9 @@
   top: 0;                   /* position initiale */
   left: 0;
 }
+
+#pabble {
+  height: 10px;
+  width: 90px;
+  background: #191cb4;
+}
