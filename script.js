@@ -1,17 +1,17 @@
 //let body = document.querySelector("body")
 let a = document.getElementById("pabble")
-let board = document.getElementById("board")
+let b = document.getElementById("board")
 //let x = 0
-let boardHeight = board.offsetHeight
-let boardWidth = board.offsetWidth
-let pabbleY = boardHeight - 50
-let pabbleX = boardWidth / 2 - (a.offsetWidth) / 2
+let bHeight = b.offsetHeight
+let bdWidth = b.offsetWidth
+let pabbleY = bHeight - 50
+let pabbleX = bdWidth / 2 - (a.offsetWidth) / 2
 a.style.transform = `translate(${pabbleX}px, ${pabbleY}px)`
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") {
         pabbleX = pabbleX + 30
         a.style.transform = `translate(${pabbleX}px,  ${pabbleY}px)`
-        if (pabbleX > boardWidth - a.offsetWidth) pabbleX = boardWidth - a.offsetWidth
+        if (pabbleX > bdWidth - a.offsetWidth) pabbleX = bdWidth - a.offsetWidth
     } else if (e.key === "ArrowLeft") {
         pabbleX = pabbleX - 30
         a.style.transform = `translate(${pabbleX}px,  ${pabbleY}px)`
