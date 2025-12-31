@@ -9,11 +9,11 @@ let pabbleX = boardWidth / 2 - (a.offsetWidth) / 2
 a.style.transform = `translate(${pabbleX}px, ${pabbleY}px)`
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") {
-        pabbleX = pabbleX + 20
+        pabbleX = pabbleX + 30
         a.style.transform = `translate(${pabbleX}px,  ${pabbleY}px)`
         if (pabbleX > boardWidth - a.offsetWidth) pabbleX = boardWidth - a.offsetWidth
     } else if (e.key === "ArrowLeft") {
-        pabbleX = pabbleX - 20
+        pabbleX = pabbleX - 30
         a.style.transform = `translate(${pabbleX}px,  ${pabbleY}px)`
         if (pabbleX < 0) pabbleX = 0
 

@@ -24,4 +24,12 @@
   height: 10px;
   width: 90px;
   background: #191cb4;
+  border-radius: 10px; 
+}
+
+#balle {
+  height: 15px;
+  width: 15px;
+  background-color: rgb(218, 15, 15);
+  border-radius: 10px  ;
 }

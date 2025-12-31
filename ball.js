@@ -1,5 +1,5 @@
 
-let element = document.getElementById("letter")
+let element = document.getElementById("balle")
 let board = document.getElementById("board")
 let boardWidth = board.offsetWidth
 let boardHeight = board.offsetHeight
