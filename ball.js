@@ -7,14 +7,24 @@ let bHeight = b.offsetHeight
 let bdWidth = b.offsetWidth
 let aHeight = a.offsetHeight
 let aWidth = a.offsetWidth
+
 let pabbleY = bHeight - 50
 let pabbleX = bdWidth / 2 - (a.offsetWidth) / 2
+
+let ballLaunched = false 
+
 a.style.transform = `translate(${pabbleX}px, ${pabbleY}px)`
+
 let keyword = {
     left: false,
     right: false
 }
+
 document.addEventListener("keydown", (e) => {
+    if (e.code === 'Space') {
+        ballLaunched = true 
+        
+    }
     if (e.key === "ArrowRight") {
         keyword.right = true
 
@@ -26,7 +36,6 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("keyup", (e) => {
     if (e.key === "ArrowRight") {
         keyword.right = false
-
     }
     if (e.key === "ArrowLeft") {
         keyword.left = false
@@ -34,7 +43,6 @@ document.addEventListener("keyup", (e) => {
 })
 
 function movePabble() {
-
     if (keyword.right) {
         pabbleX = pabbleX + 5
     }
@@ -52,8 +60,10 @@ let boardWidth = board.offsetWidth
 let boardHeight = board.offsetHeight
 let letterWidth = element.offsetWidth
 let letterHeight = element.offsetHeight
-let x = boardWidth / 2 - letterWidth / 2
-let y = boardHeight / 2 - letterHeight / 2
+
+let x = pabbleX + (aWidth / 2) - (letterWidth / 2)
+let y = pabbleY - letterHeight
+// element.style.transform = `translate(${x}px, ${y}px)`
 let dx = 5
 let dy = 5
 
@@ -82,19 +92,42 @@ function ball() {
         dx = (contact - 0.5) * 2 * maxDX
     }
 
-    element.style.transform = `translate(${x}px, ${y}px)`
-    movePabble()
-    requestAnimationFrame(ball)
 }
-requestAnimationFrame(ball)
+
+function loop() {
+    movePabble()
+
+    if (!ballLaunched) {
+        x = pabbleX + (aWidth / 2) - (letterWidth / 2)
+        y = pabbleY - letterHeight
+    }else {
+        ball()
+    }
+    
+    element.style.transform = `translate(${x}px, ${y}px)`
+    requestAnimationFrame(loop)
+}
+
+requestAnimationFrame(loop)
+
+
+
+
+
 
 
 
 /*
-pabbleX = x + 10
-letter.style.transform = `translateX(${x}px)`
-*/
-/*
-if (A+(letterWidth/2) >= board.length) touche le mur
-if (A <= 0 ) touche le mur 
+requestAnimationFrame(loop)
+
+loop():
+    movePabble()
+
+    if balle NON lancée:
+        coller la balle à la raquette
+    else:
+        faire bouger la balle (dx / dy)
+
+    draw()
+
 */
