@@ -11,7 +11,7 @@ let aWidth = a.offsetWidth
 let pabbleY = bHeight - 50
 let pabbleX = bdWidth / 2 - (a.offsetWidth) / 2
 
-let ballLaunched = false 
+let ballLaunched = false
 
 a.style.transform = `translate(${pabbleX}px, ${pabbleY}px)`
 
@@ -22,8 +22,9 @@ let keyword = {
 
 document.addEventListener("keydown", (e) => {
     if (e.code === 'Space') {
-        ballLaunched = true 
-        
+        ballLaunched = true
+        dx = Math.random() * 4 - 2; // dx entre -2 et 2
+        dy = 5; // toujours vers le haut   
     }
     if (e.key === "ArrowRight") {
         keyword.right = true
@@ -85,10 +86,10 @@ function ball() {
     //let ydown = y + letterHeight  
     let ydown = y
     if (ydown >= pabbleY && y <= pabbleY + aHeight && x + letterWidth >= pabbleX && x <= pabbleX + aWidth) {
-        dy = -dy  
+        dy = -dy
 
         let contact = (x + letterWidth / 2 - pabbleX) / aWidth
-        let maxDX = 5  
+        let maxDX = 5
         dx = (contact - 0.5) * 2 * maxDX
     }
 
@@ -100,10 +101,10 @@ function loop() {
     if (!ballLaunched) {
         x = pabbleX + (aWidth / 2) - (letterWidth / 2)
         y = pabbleY - letterHeight
-    }else {
+    } else {
         ball()
     }
-    
+
     element.style.transform = `translate(${x}px, ${y}px)`
     requestAnimationFrame(loop)
 }

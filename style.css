@@ -31,3 +31,10 @@
   background-color: rgb(218, 15, 15);
   border-radius: 10px  ;
 }
+
+#brick {
+  height : 30px;
+  width : 30px;
+  background-color: saddlebrown;
+  
+}
