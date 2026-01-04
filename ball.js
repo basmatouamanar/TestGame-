@@ -23,7 +23,7 @@ let keyword = {
 document.addEventListener("keydown", (e) => {
     if (e.code === 'Space') {
         ballLaunched = true
-        dx = Math.random() * 4 - 2; // dx entre -2 et 2
+        dx = Math.random() * 20 - 10; // dx entre -2 et 2
         dy = 5; // toujours vers le haut   
     }
     if (e.key === "ArrowRight") {
