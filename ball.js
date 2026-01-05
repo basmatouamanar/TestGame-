@@ -68,6 +68,28 @@ let y = pabbleY - letterHeight
 let dx = 5
 let dy = 5
 
+let boardBricks = document.getElementById("board");
+
+let rows = 3;
+let cols = 11;
+
+for (let i = 0; i < rows; i++) {
+  for (let j = 0; j < cols; j++) {
+    let brick = document.createElement("div");
+    brick.className = "brick";
+
+    brick.style.width = "40px";
+    brick.style.height = "20px";
+    brick.style.backgroundColor = "brown";
+    brick.style.position = "absolute";
+
+    brick.style.left = 5 + (j * 45) + "px"; // !
+    brick.style.top = 10 + (i * 25) + "px";
+
+    boardBricks.appendChild(brick);
+  }
+}
+
 
 
 function ball() {
