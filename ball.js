@@ -76,7 +76,8 @@ let rows = 3;
 let cols = 11;
 let brickWidth = 40
 let brickHeight = 20
-
+let brickRemoved = 33
+let brickfinished = false 
 for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
         let brick = document.createElement('div');
@@ -160,6 +161,10 @@ function ball() {
             dy = -dy
 
             brick.el.remove()   // BONNE brique
+            brickRemoved--
+            if (brickRemoved == 0 ) {
+                brickfinished = true 
+            }
             bricks.splice(i, 1)
 
             break
@@ -168,7 +173,7 @@ function ball() {
 }
 
 function loop() {
-    if (!paused) {
+    if (!paused && !brickfinished) {
 
         movePabble()
 
