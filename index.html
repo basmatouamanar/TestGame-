@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Move A</title>
   <link rel="stylesheet" href="style.css">
-  
+
 </head>
+
 <body>
-  <div id="live">live</div>
-  <button id="bouttonPause">Stop</button>
+  <div class="info-Cont">
+    <div id="live"></div>
+    <div id="score">score:0</div>
+    <button id="StopBtn">Pause</button>
+  </div>
   <div id="board">
     <div id="balle"></div>
-    <div id="pabble"></div>
+    <div id="paddle"></div>
   </div>
 
-  <script src="ball.js"></script>
+  <script type="module" src="ball.js"></script>
 </body>
 </html>

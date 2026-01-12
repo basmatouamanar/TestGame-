@@ -1,30 +1,55 @@
+import { gameOverLose, brickHeight, brickWidth, boardRec, addenmiesToDOM, scoreElement, addScoreToDOM, lives, bricks, addBriksToDOM, paddleElement, ballElement, boardElement, boardHeight, boardWidth, paddleHeight, paddleWidth, keyword } from "./variables.js"
 
-//let body = document.querySelector("body")
-let a = document.getElementById("pabble")
-let b = document.getElementById("board")
-//let x = 0
-let bHeight = b.offsetHeight
-let bdWidth = b.offsetWidth
-let aHeight = a.offsetHeight
-let aWidth = a.offsetWidth
+let paddleY = boardHeight - 50
+let paddleX = boardWidth / 2 - (paddleWidth) / 2
+export let ballLaunched = false
+let countLive = 0
+let fail = false
+export let score = 0;
 
-let pabbleY = bHeight - 50
-let pabbleX = bdWidth / 2 - (a.offsetWidth) / 2
+let dx = 1
+let dy = 1 
 
-let ballLaunched = false
 
-a.style.transform = `translate(${pabbleX}px, ${pabbleY}px)`
+let ballWidth = ballElement.offsetWidth
+let ballHeight = ballElement.offsetHeight
+let boardLeft = boardRec.left
+let boardTOP = boardRec.top
 
-let keyword = {
-    left: 0,
-    right: 0
+let x = paddleX + (paddleWidth / 2) - (ballWidth / 2)
+let y = paddleY - ballHeight
+let enmieDem = 30 
+let rewardDem = 20
+
+export function getScore() {
+    return score;
 }
 
+export function addScore(v) {
+    score += v;
+}
+
+paddleElement.style.transform = `translate(${paddleX}px, ${paddleY}px)`
+
+
+function movePabble() {
+        if (keyword.right) {
+            paddleX = paddleX + 8
+        }
+        if (keyword.left) {
+            paddleX = paddleX - 8
+        }
+        if (paddleX > boardWidth - paddleWidth - 5) paddleX = boardWidth - paddleWidth - 5
+        if (paddleX < 0) paddleX = 0
+        paddleElement.style.transform = `translate(${paddleX}px,  ${paddleY}px)`
+    
+
+}
 document.addEventListener("keydown", (e) => {
     if (e.code === 'Space') {
         ballLaunched = true
-        dx = Math.random() * 20 - 10; // dx entre -2 et 2
-        dy = 5; // toujours vers le haut   
+        dx = Math.random() * 20 - 10;
+        dy = 5;
     }
     if (e.key === "ArrowRight") {
         keyword.right = true
@@ -32,6 +57,12 @@ document.addEventListener("keydown", (e) => {
         keyword.left = true
     }
 })
+
+let paused = false
+document.getElementById("StopBtn").addEventListener("click", () => {
+    paused = !paused  
+})
+
 document.addEventListener("keyup", (e) => {
     if (e.key === "ArrowRight") {
         keyword.right = false
@@ -40,158 +71,207 @@ document.addEventListener("keyup", (e) => {
         keyword.left = false
     }
 })
-let paused = false
-document.getElementById("bouttonPause").addEventListener("click", () => {
-    paused = !paused  
-})
 
-function movePabble() {
-    if (keyword.right) {
-        pabbleX = pabbleX + 5
-    }
-    if (keyword.left) {
-        pabbleX = pabbleX - 5
-    }
-    if (pabbleX > bdWidth - a.offsetWidth) pabbleX = bdWidth - a.offsetWidth
-    if (pabbleX < 0) pabbleX = 0
-    a.style.transform = `translate(${pabbleX}px,  ${pabbleY}px)`
-}
 
-let element = document.getElementById("balle")
-let board = document.getElementById("board")
-let boardWidth = board.offsetWidth
-let boardHeight = board.offsetHeight
-let letterWidth = element.offsetWidth
-let letterHeight = element.offsetHeight
 
-let x = pabbleX + (aWidth / 2) - (letterWidth / 2)
-let y = pabbleY - letterHeight
-// element.style.transform = `translate(${x}px, ${y}px)`
-let dx = 5
-let dy = 5
-let bricks = []
-let boardBricks = document.getElementById("board");
-let brickX = []
-let rows = 3;
-let cols = 11;
-let brickWidth = 40
-let brickHeight = 20
-let brickRemoved = 33
+
+addBriksToDOM()
+setInterval(addScoreToDOM, 1000)
+setInterval(addenmiesToDOM, 3000)
+
+
+
+
+
+
+let gameOver = false 
 let brickfinished = false 
-for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-        let brick = document.createElement('div');
-        brick.className = "brick";
-
-        brick.style.width = "40px";
-        brick.style.height = "20px";
-        brick.style.backgroundColor = "saddlebrown";
-        brick.style.position = "absolute";
-        brick.style.left = 5 + (j * 45) + "px"; // == 90px
-        brick.style.top = 10 + (i * 25) + "px"; // == 20px
-        //console.log(brick.style.left)
-        bricks.push({
-            x: parseInt(brick.style.left),
-            y: parseInt(brick.style.top),
-            el: brick
-        })
-        //console.log(brickXY)
-        boardBricks.appendChild(brick);
-    }
-    //brickY.push(brick.style.top)
-}
-let lives = document.getElementById("live")
-for (let u = 0; u < 3; u++) {
-    let live = document.createElement('div')
-    live.className = "live"
-    live.style.width = "20px"
-    live.style.height = "20px"
-    live.style.backgroundColor = "green"
-    live.style.margin = "5px"
-    live.style.borderRadius = "10px"
-    lives.appendChild(live)
-
-}
-
-let countLive = 0
-let fail = false
+let brickRemoved = 33
 
 function ball() {
     x = x + dx
     y = y + dy
-    if (x <= 0 || (x + letterWidth) >= boardWidth) {
-        dx = -dx
+   if (x <= 0) {
+        x = 0;
+        dx = -dx;
     }
-    /* if ((y + letterHeight) >= boardHeight) {
-         y = boardHeight - letterHeight
-         return 
-     }*/
+    if (x + ballWidth >= boardWidth) {
+        x = boardWidth - ballWidth;
+        dx = -dx;
+    }
     if (y <= 0) {
-        dy = -dy
+        y = 0;
+        dy = -dy;
     }
-    if ((y + letterHeight) >= boardHeight) {
-        let lives = document.getElementById('live')
+    if ((y + ballHeight) >= boardHeight) {
         let oneLive = lives.querySelector('.live')
         if (oneLive) {
             oneLive.remove()
+            score -= 15
+            if (score < 0) {
+                score = 0
+            }
+            scoreElement.innerHTML = `score: ${score}`
         }
         ballLaunched = false
         countLive++
         fail = true
     }
-    //let ydown = y + letterHeight  
     let ydown = y
-    if (ydown >= pabbleY && y <= pabbleY + aHeight && x + letterWidth >= pabbleX && x <= pabbleX + aWidth) {
+    if (ydown >= paddleY && y <= paddleY + paddleHeight && x + ballWidth >= paddleX && x <= paddleX + paddleWidth) {
         dy = -dy
 
-        let contact = (x + letterWidth / 2 - pabbleX) / aWidth
+        let contact = (x + ballWidth / 2 - paddleX) / paddleWidth
         let maxDX = 5
         dx = (contact - 0.5) * 2 * maxDX
     }
-    let contact = false
     for (let i = 0; i < bricks.length; i++) {
         let brick = bricks[i]
 
         if (
             x < brick.x + brickWidth &&
-            x + letterWidth > brick.x &&
+            x + ballWidth > brick.x &&
             y < brick.y + brickHeight &&
-            y + letterHeight > brick.y
+            y + ballHeight > brick.y
         ) {
             dy = -dy
-
-            brick.el.remove()   // BONNE brique
-            brickRemoved--
-            if (brickRemoved == 0 ) {
-                brickfinished = true 
+            brick.el.remove()
+            brickRemoved-- 
+            if (brickRemoved === 0 ) {
+               window.location.href = "gameOver.html";
+              //  brickfinished = true
             }
             bricks.splice(i, 1)
+            
+            score += 10
+            scoreElement.innerHTML = `score: ${score}`
+
 
             break
         }
     }
+
+
+
+
 }
-
+let a = 0
 function loop() {
-    if (!paused && !brickfinished) {
 
+    if (!paused ) {
         movePabble()
-
+    
         if (!ballLaunched || fail) {
-            x = pabbleX + (aWidth / 2) - (letterWidth / 2)
-            y = pabbleY - letterHeight
+            x = paddleX + (paddleWidth / 2) - (ballWidth / 2)
+            y = paddleY - ballHeight
             if (countLive < 3) {
                 fail = false
             } else {
-
-            }
+                a++
+                if(a==1){
+                let end = document.createElement('div');
+                end.className = 'endGame';
+                end.innerHTML = gameOverLose;
+                document.body.appendChild(end);
+                const s = end.querySelector('#scoreCount');
+                if (s) {
+                    s.textContent = score;
+                }
+                const retryBtn = end.querySelector('#retryBtn');
+    
+                retryBtn.addEventListener('click', () => {
+                   
+    
+                    end.remove();
+    
+                  
+                    score = 0;
+                    countLive = 0;
+                    fail = false;
+                    a = 0;
+    
+                  //  resetBall();       
+                  //  clearBricks();      
+                    addBriksToDOM();  
+                  //  startGameLoop();    
+                });
+    
+            }}
+    
         } else {
             ball()
         }
+        
     }
-    element.style.transform = `translate(${x}px, ${y}px)`
+    ballElement.style.transform = `translate(${x}px, ${y}px)`
     requestAnimationFrame(loop)
 }
+let lastTimeEnemy = 0;
+let lastTimeReward = 0;
+
+function animateRewardOrEnemie(typ, Dim, sc, time = 0) {
+    const isEnemy = typ === 'enmie';
+    const lastTime = isEnemy ? lastTimeEnemy : lastTimeReward;
+
+    const delta = (time - lastTime) / 1000;
+    if (isEnemy) lastTimeEnemy = time;
+    else lastTimeReward = time;
+
+    const speed = 200;
+    const elements = [...document.getElementsByClassName(typ)];
+    if (ballLaunched) {
+        for (let el of elements) {
+
+
+            if (el.y === undefined) {
+                const rect = el.getBoundingClientRect();
+                el.x = rect.left - boardRec.left;
+                el.y = 0;
+            }
+
+            el.y += speed * delta;
+
+            const elementX = el.x;
+            const elementY = el.y;
+
+
+
+
+            if (
+                elementX > paddleX - Dim / 2 &&
+                elementX <= paddleX + paddleWidth &&
+                elementY >= paddleY - Dim
+            ) {
+
+
+                el.remove();
+                score = Math.max(0, score + sc);
+                scoreElement.innerHTML = `score: ${score}`;
+                continue;
+            }
+
+            // missed
+            if (elementY + Dim / 2 >= paddleY + paddleHeight) {
+                el.remove();
+                continue;
+            }
+
+            el.style.transform = `translate(${elementX}px, ${elementY}px)`;
+        }
+    }
+    requestAnimationFrame((t) =>
+        animateRewardOrEnemie(typ, Dim, sc, t)
+    );
+}
+
+// start once
+requestAnimationFrame((t) =>
+    animateRewardOrEnemie('enmie', enmieDem, -15, t)
+);
+requestAnimationFrame((t) =>
+    animateRewardOrEnemie('reward', rewardDem, 5, t)
+);
+
 
 requestAnimationFrame(loop)
 
@@ -201,41 +281,3 @@ requestAnimationFrame(loop)
 
 
 
-
-/*
-let ballX = '95px';
-let ballY = '10px';
-
-bricksPos.forEach(pos => {
-  if (pos.x === ballX && pos.y === ballY) {
-    console.log("MATCH trouvé", pos);
-  }
-});
-
-
-
-let ballX = 95;
-let ballY = 10;
-
-bricksPos.forEach(pos => {
-  let x = parseInt(pos.x);
-  let y = parseInt(pos.y);
-
-  if (x === ballX && y === ballY) {
-    console.log("MATCH trouvé", pos);
-  }
-});
-
-
-let value = 10;
-
-bricksPos.forEach(pos => {
-  if (parseInt(pos.x) === value) {
-    console.log("match avec x", pos);
-  }
-  if (parseInt(pos.y) === value) {
-    console.log("match avec y", pos);
-  }
-});
-
-*/
